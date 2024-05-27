@@ -38,6 +38,8 @@ void AAuraEffectActor::OnStartOverlap(UPrimitiveComponent* OverlappedComponent, 
 		// DO NOT DO THIS, THIS IS A HACK FOR LEARNING ONLY
 		UAuraAttributeSet* MutableAuraAttributeSet = const_cast<UAuraAttributeSet*>(AuraAttributeSet);
 		MutableAuraAttributeSet->SetHealth(AuraAttributeSet->GetHealth() + 25.f);
+
+		MutableAuraAttributeSet->SetMana(AuraAttributeSet->GetMana() - 25.f);
 		Destroy();
 	}
 }
