@@ -28,6 +28,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* CameraComponent;
 
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 	
 };
