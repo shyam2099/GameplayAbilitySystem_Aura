@@ -21,7 +21,7 @@ AAuraCharacter::AAuraCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	SpringArmComponent->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
-	SpringArmComponent->TargetArmLength = 750.f;
+	SpringArmComponent->TargetArmLength = 800.f;
 	SpringArmComponent->bUsePawnControlRotation = false;
 	SpringArmComponent->bEnableCameraLag = true;
 	SpringArmComponent->bInheritPitch = false;
