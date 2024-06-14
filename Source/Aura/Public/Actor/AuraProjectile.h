@@ -32,14 +32,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	TObjectPtr<USphereComponent> Sphere;
+
 private:
 	UPROPERTY(EditAnywhere)
 	float LifeSpan;	
 	
 	bool bHit;
-	
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraSystem> ImpactEffectSystem;
