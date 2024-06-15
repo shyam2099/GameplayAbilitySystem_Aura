@@ -15,6 +15,22 @@ class IEnemyInterface;
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
+
+USTRUCT(BlueprintType)
+struct FCameraOccludedActor
+{
+	GENERATED_USTRUCT_BODY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	const AActor* Actor;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* StaticMesh;
+  
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<UMaterialInterface*> Materials;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool IsOccluded;
+};
+
 /**
  * 
  */
@@ -30,9 +46,33 @@ public:
 	UFUNCTION(Client, Reliable)
 	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCritHit);
 
+	UFUNCTION(BlueprintCallable)
+	void SyncOccludedActors();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+
+	/** How much of the Pawn capsule Radius and Height
+ * should be used for the Line Trace before considering an Actor occluded?
+ * Values too low may make the camera clip through walls.
+ */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera Occlusion|Occlusion",
+	  meta=(ClampMin="0.1", ClampMax="10.0") )
+	float CapsulePercentageForTrace;
+  
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera Occlusion|Materials")
+	UMaterialInterface* FadeMaterial;
+	UPROPERTY(BlueprintReadWrite, Category="Camera Occlusion|Components")
+	class USpringArmComponent* ActiveSpringArm;
+	UPROPERTY(BlueprintReadWrite, Category="Camera Occlusion|Components")
+	class UCameraComponent* ActiveCamera;
+	UPROPERTY(BlueprintReadWrite, Category="Camera Occlusion|Components")
+	class UCapsuleComponent* ActiveCapsuleComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera Occlusion")
+	bool IsOcclusionEnabled;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera Occlusion|Occlusion")
+	bool DebugLineTraces;
 
 private:
 	UPROPERTY(EditAnywhere, Category="Input")
@@ -82,4 +122,16 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
+
+	TMap<const AActor*, FCameraOccludedActor> OccludedActors;
+  
+	bool HideOccludedActor(const AActor* Actor);
+	bool OnHideOccludedActor(const FCameraOccludedActor& OccludedActor) const;
+	void ShowOccludedActor(FCameraOccludedActor& OccludedActor);
+	bool OnShowOccludedActor(const FCameraOccludedActor& OccludedActor) const;
+	void ForceShowOccludedActors();
+	__forceinline bool ShouldCheckCameraOcclusion() const
+	{
+		return IsOcclusionEnabled && FadeMaterial && ActiveCamera && ActiveCapsuleComponent;
+	}
 };
