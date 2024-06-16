@@ -61,6 +61,7 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
 	
 	TMap<FGameplayTag, FGameplayAttribute> TagsToAttributes;
 	
@@ -162,6 +163,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData IncomingXP;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingXP);
 
 	/**
 	* Replication Events
@@ -229,6 +234,10 @@ public:
 
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& EffectProperties) const;
-	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCritHit) const; 
+	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCritHit) const;
+	void SendXPEvent(const FEffectProperties& Props);
+
+	bool bTopOffHealth = false;
+	bool bTopOffMana = false;
 	
 };

@@ -85,8 +85,16 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
 
-	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
-	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
+	int32 SourceAvatarLevel = 1;
+	int32 TargetAvatarLevel = 1;
+	if (SourceAvatar->Implements<UCombatInterface>())
+	{
+		SourceAvatarLevel = ICombatInterface::Execute_GetPlayerLevel(SourceAvatar);
+	}
+	if (TargetAvatar->Implements<UCombatInterface>())
+	{
+		TargetAvatarLevel = ICombatInterface::Execute_GetPlayerLevel(TargetAvatar);
+	}
 
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
@@ -138,10 +146,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 	const FRealCurve* ArmorPenCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPen"), FString());
-	const float ArmorPenCoefficient = ArmorPenCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	const float ArmorPenCoefficient = ArmorPenCurve->Eval(SourceAvatarLevel);
 
 	const FRealCurve* EffectiveArmorCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectiveArmor"), FString());
-	const float EffectiveArmorCoefficient = EffectiveArmorCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float EffectiveArmorCoefficient = EffectiveArmorCurve->Eval(TargetAvatarLevel);
 
 	const float EffectiveArmor = TargetArmor * (100 - SourceArmorPen * ArmorPenCoefficient) / 100.f;
 	Damage *= (100 - EffectiveArmor * EffectiveArmorCoefficient) / 100.f;
@@ -160,7 +168,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	SourceCritDamage = FMath::Abs(SourceCritDamage);
 
 	const FRealCurve* CritResistCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("CritResist"), FString());
-	const float CritResistCoefficient = CritResistCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float CritResistCoefficient = CritResistCurve->Eval(TargetAvatarLevel);
 	
 	const float EffectiveCritChance = SourceCritChance - TargetCritResit * CritResistCoefficient;
 	
