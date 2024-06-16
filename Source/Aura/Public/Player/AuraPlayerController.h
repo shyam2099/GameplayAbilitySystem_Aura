@@ -28,7 +28,7 @@ struct FCameraOccludedActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<UMaterialInterface*> Materials;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool IsOccluded;
+	bool IsOccluded = false;
 };
 
 /**
