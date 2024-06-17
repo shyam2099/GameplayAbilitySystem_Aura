@@ -12,6 +12,7 @@ class UAuraAttributeSet;
 class UAuraAbilitySystemComponent;
 class AAuraPlayerState;
 class AAuraPlayerController;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatUpdatedSignature, int32, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FAuraAbilityInfo&, Info);
 

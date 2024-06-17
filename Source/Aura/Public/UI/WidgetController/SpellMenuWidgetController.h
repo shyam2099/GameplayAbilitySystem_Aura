@@ -6,6 +6,8 @@
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "SpellMenuWidgetController.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilitySelectedSignature, UAuraUserWidget*, AbilityButton);
+
 /**
  * 
  */
@@ -17,5 +19,14 @@ class AURA_API USpellMenuWidgetController : public UAuraWidgetController
 public:
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependencies() override;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerStatUpdatedSignature SpellPointsChangedDelegate;
+
+	UFUNCTION(BlueprintCallable, Category = "GAS|Spells Menu")
+	void SelectAbility(UAuraUserWidget* AbilityButton);
+        
+	UPROPERTY(BlueprintAssignable, Category = "GAS|Spells Menu")
+	FAbilitySelectedSignature AbilitySelectedDelegate;
 	
 };
