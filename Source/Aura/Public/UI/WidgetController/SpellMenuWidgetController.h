@@ -7,6 +7,7 @@
 #include "SpellMenuWidgetController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilitySelectedSignature, UAuraUserWidget*, AbilityButton);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FGlobeSelectedSignature, FString, DescriptionString, FString, NextLevelDescriptionString);
 
 /**
  * 
@@ -24,9 +25,15 @@ public:
 	FOnPlayerStatUpdatedSignature SpellPointsChangedDelegate;
 
 	UFUNCTION(BlueprintCallable, Category = "GAS|Spells Menu")
-	void SelectAbility(UAuraUserWidget* AbilityButton);
+	void SelectAbility(UAuraUserWidget* AbilityButton, const FGameplayTag& AbilityTag);
         
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Spells Menu")
 	FAbilitySelectedSignature AbilitySelectedDelegate;
+	
+	UFUNCTION(BlueprintCallable)
+	void SpendPointButtonPressed(const FGameplayTag& AbilityTag);
+
+	UPROPERTY(BlueprintAssignable)
+	FGlobeSelectedSignature GlobeSelectedDelegate;
 	
 };

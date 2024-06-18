@@ -16,7 +16,7 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 
 void USpellMenuWidgetController::BindCallbacksToDependencies()
 {
-	GetAuraASC()->AbilityStatusChangedDelegate.AddLambda([this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag)
+	GetAuraASC()->AbilityStatusChangedDelegate.AddLambda([this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, int32 NewLevel)
 	{
 		if (AbilityInfo)
 		{
@@ -32,7 +32,20 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 	});
 }
 
-void USpellMenuWidgetController::SelectAbility(UAuraUserWidget* AbilityButton)
+void USpellMenuWidgetController::SelectAbility(UAuraUserWidget* AbilityButton, const FGameplayTag& AbilityTag)
 {
 	AbilitySelectedDelegate.Broadcast(AbilityButton);
+	FString Description;
+	FString NextLevelDescription;
+	GetAuraASC()->GetDescriptionsByAbilityTag(AbilityTag, Description, NextLevelDescription);
+	GlobeSelectedDelegate.Broadcast(Description, NextLevelDescription);
+}
+
+void USpellMenuWidgetController::SpendPointButtonPressed(const FGameplayTag& AbilityTag)
+{
+	if (GetAuraASC())
+	{
+		GetAuraASC()->ServerSpendSpellPoint(AbilityTag);
+	}
+	
 }
