@@ -331,15 +331,19 @@ bool AAuraPlayerController::HideOccludedActor(const AActor* Actor)
 	{
 		UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>(
 			Actor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
-		FCameraOccludedActor OccludedActor;
-		OccludedActor.Actor = Actor;
-		OccludedActor.StaticMesh = StaticMesh;
-		OccludedActor.Materials = StaticMesh->GetMaterials();
-		OccludedActor.IsOccluded = true;
-		OccludedActors.Add(Actor, OccludedActor);
-		OnHideOccludedActor(OccludedActor);
-		if (DebugLineTraces) UE_LOG(LogTemp, Warning, TEXT("Actor %s does not exist, creating and occluding it now."),
-		                            *Actor->GetName());
+		if (StaticMesh)
+		{
+			FCameraOccludedActor OccludedActor;
+			OccludedActor.Actor = Actor;
+			OccludedActor.StaticMesh = StaticMesh;
+			OccludedActor.Materials = StaticMesh->GetMaterials();
+			OccludedActor.IsOccluded = true;
+			OccludedActors.Add(Actor, OccludedActor);
+			OnHideOccludedActor(OccludedActor);
+			if (DebugLineTraces) UE_LOG(LogTemp, Warning, TEXT("Actor %s does not exist, creating and occluding it now."),
+										*Actor->GetName());
+		}
+		
 	}
 	return true;
 }
