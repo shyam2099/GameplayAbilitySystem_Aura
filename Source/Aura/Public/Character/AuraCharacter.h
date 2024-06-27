@@ -37,6 +37,7 @@ public:
 	virtual int32 GetSpellPoints_Implementation() const override;
 	virtual void ShowMagicCirlce_Implementation(UMaterialInterface* DecalMaterial) override;
 	virtual void HideMagicCirlce_Implementation() override;
+	virtual void SaveProgress_Implementation(const FName& CheckpointTag) override;
 	
 	// Combat Interface Functions
 	virtual int32 GetPlayerLevel_Implementation() override;
@@ -46,7 +47,8 @@ public:
 
 	virtual void OnRep_Stunned() override;
 	virtual void OnRep_Burning() override;
-	
+
+	void LoadProgress();
 private:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* SpringArmComponent;
