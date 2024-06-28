@@ -19,7 +19,7 @@ ACheckpoint::ACheckpoint(const FObjectInitializer& ObjectInitializer)
 	CheckpointMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CheckpointMesh->SetCollisionResponseToAllChannels(ECR_Block);
 
-	// CheckpointMesh->SetCustomDepthStencilValue(CustomDepthStencilOverride);
+	CheckpointMesh->SetCustomDepthStencilValue(CustomDepthStencilOverride);
 	CheckpointMesh->MarkRenderStateDirty();
 
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
@@ -70,23 +70,23 @@ void ACheckpoint::BeginPlay()
 	}
 }
 
-// void ACheckpoint::SetMoveToLocation_Implementation(FVector& OutDestination)
-// {
-// 	OutDestination = MoveToComponent->GetComponentLocation();
-// }
+void ACheckpoint::SetMoveToLocation_Implementation(FVector& OutDestination)
+{
+	OutDestination = MoveToComponent->GetComponentLocation();
+}
 
-// void ACheckpoint::HighlightActor_Implementation()
-// {
-// 	if (!bReached)
-// 	{
-// 		CheckpointMesh->SetRenderCustomDepth(true);
-// 	}
-// }
+void ACheckpoint::HighlightActor_Implementation()
+{
+	if (!bReached)
+	{
+		CheckpointMesh->SetRenderCustomDepth(true);
+	}
+}
 
-// void ACheckpoint::UnHighlightActor_Implementation()
-// {
-// 	CheckpointMesh->SetRenderCustomDepth(false);
-// }
+void ACheckpoint::UnHighlightActor_Implementation()
+{
+	CheckpointMesh->SetRenderCustomDepth(false);
+}
 
 void ACheckpoint::HandleGlowEffects()
 {

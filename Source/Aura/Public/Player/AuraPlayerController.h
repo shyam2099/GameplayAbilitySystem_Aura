@@ -33,6 +33,13 @@ struct FCameraOccludedActor
 	bool IsOccluded = false;
 };
 
+enum class ETargetingStatus : uint8
+{
+	TargetingEnemy,
+	TargetingNonEnemy,
+	NotTargeting
+};
+
 /**
  * 
  */
@@ -98,9 +105,11 @@ private:
 	bool bShiftKeyDown;
 
 	void CursorTrace();
-	TScriptInterface<IEnemyInterface> LastActor;
-	TScriptInterface<IEnemyInterface> CurrentActor;
+	TObjectPtr<AActor> LastActor;
+	TObjectPtr<AActor> CurrentActor;
 	FHitResult CursorHit;
+	static void HighlightActor(AActor* InActor);
+	static void UnHighlightActor(AActor* InActor);
 
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
@@ -118,7 +127,7 @@ private:
 	float FollowTime = 0.f;
 	float ShortPressThreshold = 0.2f;
 	bool bAutoRunning = false;
-	bool bTargeting = false;
+	ETargetingStatus TargetingStatus = ETargetingStatus::NotTargeting;
 
 	void AutoRun();
 

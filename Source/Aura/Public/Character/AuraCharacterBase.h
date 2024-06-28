@@ -76,6 +76,8 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	bool bIsBeingShocked = false;
 
+	void SetCharacterClass(ECharacterClass InClass) { CharacterClass = InClass; }
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -93,7 +95,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	FName TailSocketName;
-	
+
+	UPROPERTY(BlueprintReadOnly)
 	bool bDead = false;
 
 	virtual void StunTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
